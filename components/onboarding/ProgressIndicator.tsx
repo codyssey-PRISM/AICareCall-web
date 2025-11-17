@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface ProgressIndicatorProps {
   currentStep: number;
+  onStepClick?: (step: number) => void;
 }
 
 const steps = [
@@ -14,7 +15,14 @@ const steps = [
   { number: 5, label: '최종 확인' },
 ];
 
-export function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
+export function ProgressIndicator({ currentStep, onStepClick }: ProgressIndicatorProps) {
+  const handleStepClick = (stepNumber: number) => {
+    // 디버깅 모드: 모든 단계 클릭 가능
+    if (onStepClick) {
+      onStepClick(stepNumber);
+    }
+  };
+
   return (
     <div className="w-full mb-8 md:mb-12">
       <div className="flex items-center justify-between">
@@ -30,8 +38,12 @@ export function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
                   step.number === currentStep &&
                     'bg-primary text-primary-foreground ring-4 ring-primary/20',
                   step.number > currentStep &&
-                    'bg-muted text-muted-foreground'
+                    'bg-muted text-muted-foreground',
+                  // 모든 단계 클릭 가능 (디버깅 모드)
+                  onStepClick &&
+                    'cursor-pointer hover:scale-110'
                 )}
+                onClick={() => handleStepClick(step.number)}
               >
                 {step.number < currentStep ? (
                   <Check className="w-5 h-5" />
@@ -46,8 +58,11 @@ export function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
                   'text-xs md:text-sm text-center whitespace-nowrap transition-colors',
                   step.number <= currentStep
                     ? 'text-foreground font-medium'
-                    : 'text-muted-foreground'
+                    : 'text-muted-foreground',
+                  onStepClick &&
+                    'cursor-pointer'
                 )}
+                onClick={() => handleStepClick(step.number)}
               >
                 {step.label}
               </span>

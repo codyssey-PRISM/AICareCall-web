@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { SoriCharacter } from './SoriCharacter';
+import { Emotion3D } from '@/app/components/custom/Emotion3D';
 
 interface CallDetailModalProps {
     isOpen: boolean;
@@ -51,7 +52,7 @@ export function CallDetailModal({ isOpen, onClose, call }: CallDetailModalProps)
                             <SoriCharacter size={28} />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-slate-900">통화 내용 상세 정보</h2>
+                            <h2 className="text-xl font-black text-slate-900">통화 상세 리포트</h2>
                             <p className="text-xs text-slate-400 mt-0.5">{call.date} {call.time}</p>
                         </div>
                     </div>
@@ -95,7 +96,8 @@ export function CallDetailModal({ isOpen, onClose, call }: CallDetailModalProps)
                         </p>
 
                         {/* Health Insights - with premium emotion icons */}
-                        <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-violet-200">
+                        <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-violet-200">
+                            {/* 1. 식사 */}
                             <div className="flex items-center gap-2">
                                 <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
                                     <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -105,6 +107,7 @@ export function CallDetailModal({ isOpen, onClose, call }: CallDetailModalProps)
                                 <span className="text-xs font-bold text-emerald-600">식사</span>
                                 <span className="text-xs text-slate-500">확인됨</span>
                             </div>
+                            {/* 2. 복약 (Renamed from Health) */}
                             <div className="flex items-center gap-2">
                                 <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
                                     <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -114,13 +117,7 @@ export function CallDetailModal({ isOpen, onClose, call }: CallDetailModalProps)
                                 <span className="text-xs font-bold text-emerald-600">복약</span>
                                 <span className="text-xs text-slate-500">확인됨</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z" clipRule="evenodd" />
-                                </svg>
-                                <span className="text-xs font-bold text-blue-600">기분</span>
-                                <span className="text-xs text-slate-500">양호</span>
-                            </div>
+                            {/* 3. 기분 - REMOVED as requested (중복) */}
                         </div>
                     </div>
 
@@ -138,22 +135,8 @@ export function CallDetailModal({ isOpen, onClose, call }: CallDetailModalProps)
                         </div>
                         <div className="bg-slate-50 rounded-lg p-5 border border-slate-200">
                             <p className="text-sm font-bold text-slate-600 mb-3">감정 상태</p>
-                            <div className="flex items-center gap-2">
-                                {call.emotion === '좋음' && (
-                                    <svg className="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-3 6a5 5 0 01-4.546-2.916 1 1 0 011.886-.668A3 3 0 0010 12a3 3 0 002.66-1.584 1 1 0 111.886.668A5 5 0 0111 14z" clipRule="evenodd" />
-                                    </svg>
-                                )}
-                                {call.emotion === '보통' && (
-                                    <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7 5a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1z" clipRule="evenodd" />
-                                    </svg>
-                                )}
-                                {call.emotion === '나쁨' && (
-                                    <svg className="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.536 5.879a1 1 0 001.415 0 3 3 0 014.242 0 1 1 0 001.415-1.415 5 5 0 00-7.072 0 1 1 0 000 1.415z" clipRule="evenodd" />
-                                    </svg>
-                                )}
+                            <div className="flex items-center gap-3">
+                                <Emotion3D emotion={call.emotion} />
                                 <span className={`text-sm font-black px-3 py-1.5 rounded-lg inline-block ${getEmotionColor(call.emotion)}`}>
                                     {call.emotion}
                                 </span>

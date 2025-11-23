@@ -22,7 +22,8 @@ const formSchema = z.object({
   name: z
     .string()
     .min(2, "이름은 최소 2자 이상이어야 합니다")
-    .max(20, "이름은 최대 20자까지 입력 가능합니다"),
+    .max(20, "이름은 최대 20자까지 입력 가능합니다")
+    .regex(/^[가-힣a-zA-Z]+$/, "이름은 한글 또는 영문만 입력 가능합니다"),
   email: z.string().email("올바른 이메일 형식이 아닙니다"),
   verificationCode: z.string().optional(),
 });
@@ -37,6 +38,7 @@ export function Step1GuardianInfo({ onNext }: FirstStepProps) {
 
   const form = useForm<GuardianInfoData>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       name: "",
       email: "",
@@ -126,7 +128,7 @@ export function Step1GuardianInfo({ onNext }: FirstStepProps) {
                       placeholder="예) 김민수"
                       {...field}
                       disabled={isVerified}
-                      className="h-12 text-sm border-2 border-slate-300 focus:border-violet-500 rounded-xl font-medium"
+                      className={`h-12 text-sm border-2 focus:border-violet-500 rounded-xl font-medium ${form.formState.errors.name ? 'border-red-500' : 'border-slate-300'}`}
                     />
                   </FormControl>
                   <FormMessage className="text-xs font-semibold" />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { LNB } from '@/app/components/custom/LNB';
+import { LNB } from '@/app/components/LNB';
 import { SoriCharacter } from '@/app/components/custom/SoriCharacter';
 
 export default function Settings() {

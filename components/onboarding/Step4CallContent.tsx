@@ -16,21 +16,22 @@ import { Textarea } from '@/components/ui/textarea';
 import type { StepProps, CallContentData } from '@/types/onboarding';
 
 const formSchema = z.object({
-  askMeal: z.boolean().default(true),
-  askMedication: z.boolean().default(true),
-  askMood: z.boolean().default(true),
-  askActivity: z.boolean().default(true),
+  askMeal: z.boolean().default(false),
+  askMedication: z.boolean().default(false),
+  askMood: z.boolean().default(false),
+  askActivity: z.boolean().default(false),
   additionalQuestions: z.string().max(500, '최대 500자까지 입력 가능합니다').optional(),
 });
 
 export function Step4CallContent({ onNext, onPrev, initialData }: StepProps<CallContentData>) {
   const form = useForm<any>({
     resolver: zodResolver(formSchema) as any,
+    mode: "onChange",
     defaultValues: {
-      askMeal: (initialData as any)?.askMeal ?? true,
-      askMedication: (initialData as any)?.askMedication ?? true,
-      askMood: (initialData as any)?.askMood ?? true,
-      askActivity: (initialData as any)?.askActivity ?? true,
+      askMeal: (initialData as any)?.askMeal ?? false,
+      askMedication: (initialData as any)?.askMedication ?? false,
+      askMood: (initialData as any)?.askMood ?? false,
+      askActivity: (initialData as any)?.askActivity ?? false,
       additionalQuestions: initialData?.additionalQuestions || '',
     },
   });
@@ -101,7 +102,9 @@ export function Step4CallContent({ onNext, onPrev, initialData }: StepProps<Call
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <h3 className="text-base font-black text-slate-900 mb-4">기본 질문 선택</h3>
+              <h3 className="text-base font-black text-slate-900 mb-4">
+                기본 질문 선택 <span className="text-xs font-normal text-slate-500 ml-2">(클릭하여 선택해주세요)</span>
+              </h3>
               <div className="grid grid-cols-2 gap-3">
                 {categories.map((category) => (
                   <FormField

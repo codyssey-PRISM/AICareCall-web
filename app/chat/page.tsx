@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { LNB } from '@/app/components/custom/LNB';
+import { LNB } from '@/app/components/LNB';
 import { SoriCharacter } from '@/app/components/custom/SoriCharacter';
 
 interface Message {
@@ -179,8 +179,8 @@ export default function Chat() {
             <button
               onClick={() => setActiveTab('live')}
               className={`px-6 py-3 rounded-t-md font-bold text-sm transition-all ${activeTab === 'live'
-                  ? 'bg-white text-violet-600 border-2 border-b-0 border-violet-300'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-white text-violet-600 border-2 border-b-0 border-violet-300'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
             >
               실시간 통화
@@ -188,8 +188,8 @@ export default function Chat() {
             <button
               onClick={() => setActiveTab('history')}
               className={`px-6 py-3 rounded-t-md font-bold text-sm transition-all ${activeTab === 'history'
-                  ? 'bg-white text-violet-600 border-2 border-b-0 border-violet-300'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-white text-violet-600 border-2 border-b-0 border-violet-300'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
             >
               통화 기록
@@ -278,8 +278,8 @@ export default function Chat() {
                   >
                     {/* 아바타 */}
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${msg.speaker === 'sori'
-                        ? 'bg-gradient-to-br from-blue-600 to-cyan-600'
-                        : 'bg-gradient-to-br from-violet-600 to-purple-600'
+                      ? 'bg-gradient-to-br from-blue-600 to-cyan-600'
+                      : 'bg-gradient-to-br from-violet-600 to-purple-600'
                       }`}>
                       {msg.speaker === 'sori' ? (
                         <SoriCharacter size={28} animated={false} />
@@ -308,8 +308,8 @@ export default function Chat() {
                                   <div
                                     key={i}
                                     className={`w-1 rounded-full transition-all ${i < Math.floor(msg.voiceLevel! / 25)
-                                        ? 'bg-green-600'
-                                        : 'bg-slate-300'
+                                      ? 'bg-green-600'
+                                      : 'bg-slate-300'
                                       }`}
                                     style={{ height: `${(i + 1) * 25}%` }}
                                   ></div>
@@ -322,8 +322,8 @@ export default function Chat() {
 
                         {/* 말풍선 */}
                         <div className={`px-5 py-4 rounded-xl ${msg.speaker === 'sori'
-                            ? 'bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-200'
-                            : 'bg-white border-2 border-slate-200'
+                          ? 'bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-200'
+                          : 'bg-white border-2 border-slate-200'
                           }`}>
                           <p className="text-base font-bold text-slate-900 leading-relaxed">{msg.text}</p>
 

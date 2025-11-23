@@ -23,7 +23,7 @@ import type { StepProps, ElderInfoData } from "@/types/onboarding";
 import { formatPhoneNumber } from "@/lib/onboarding-helpers";
 
 const formSchema = z.object({
-  name: z.string().min(2, "이름은 최소 2자 이상이어야 합니다").max(20, "이름은 최대 20자까지 입력 가능합니다"),
+  name: z.string().min(2, "이름은 최소 2자 이상이어야 합니다").max(20, "이름은 최대 20자까지 입력 가능합니다").regex(/^[가-힣a-zA-Z]+$/, "이름은 한글 또는 영문만 입력 가능합니다"),
   gender: z.enum(["male", "female"]).refine((val) => val, { message: "성별을 선택해주세요" }),
   age: z.number().min(1, "올바른 나이를 입력해주세요").max(150, "올바른 나이를 입력해주세요"),
   phone: z.string().regex(/^010-\d{4}-\d{4}$/, "올바른 전화번호 형식이 아닙니다 (010-0000-0000)"),
@@ -31,13 +31,13 @@ const formSchema = z.object({
   relationshipOther: z.string().optional(),
   livingArrangement: z.string().optional(),
   livingArrangementOther: z.string().optional(),
-  healthInfo: z.string().min(1, "건강 정보를 입력해주세요").max(500, "최대 500자까지 입력 가능합니다"),
+  healthInfo: z.string().max(500, "최대 500자까지 입력 가능합니다").optional(),
 })
-  .refine((data) => data.relationship !== "other" || data.relationshipOther?.trim(), {
+  .refine((data) => !data.relationship || data.relationship !== "other" || data.relationshipOther?.trim(), {
     message: "관계를 입력해주세요",
     path: ["relationshipOther"],
   })
-  .refine((data) => data.livingArrangement !== "other" || data.livingArrangementOther?.trim(), {
+  .refine((data) => !data.livingArrangement || data.livingArrangement !== "other" || data.livingArrangementOther?.trim(), {
     message: "거주 형태를 입력해주세요",
     path: ["livingArrangementOther"],
   });
@@ -45,6 +45,7 @@ const formSchema = z.object({
 export function Step2ElderInfo({ onNext, onPrev, initialData }: StepProps<ElderInfoData>) {
   const form = useForm<ElderInfoData>({
     resolver: zodResolver(formSchema) as any,
+    mode: "onChange",
     defaultValues: {
       name: initialData?.name || "",
       gender: initialData?.gender || undefined,
@@ -86,7 +87,7 @@ export function Step2ElderInfo({ onNext, onPrev, initialData }: StepProps<ElderI
                     이름 <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="예) 김영희" {...field} className="h-12 text-sm border-2 border-slate-300 focus:border-emerald-500 rounded-xl" />
+                    <Input placeholder="예) 김영희" {...field} className={`h-12 text-sm border-2 focus:border-emerald-500 rounded-xl ${form.formState.errors.name ? 'border-red-500' : 'border-slate-300'}`} />
                   </FormControl>
                   <FormMessage className="text-xs" />
                 </FormItem>
@@ -149,14 +150,14 @@ export function Step2ElderInfo({ onNext, onPrev, initialData }: StepProps<ElderI
                         value={field.value === undefined || field.value === null ? "" : field.value}
                         onChange={(e) => {
                           const value = e.target.value;
-                          if (value !== "" && value.length > 3) return;
+                          if (value !== "" && value.length > 2) return;
                           field.onChange(value === "" ? "" : Number(value));
                         }}
                         onBlur={field.onBlur}
                         name={field.name}
                         ref={field.ref}
-                        maxLength={3}
-                        className="h-12 text-sm border-2 border-slate-300 focus:border-emerald-500 rounded-xl"
+                        maxLength={2}
+                        className={`h-12 text-sm border-2 focus:border-emerald-500 rounded-xl ${form.formState.errors.age ? 'border-red-500' : 'border-slate-300'}`}
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -179,7 +180,7 @@ export function Step2ElderInfo({ onNext, onPrev, initialData }: StepProps<ElderI
                       {...field}
                       onChange={(e) => field.onChange(formatPhoneNumber(e.target.value))}
                       maxLength={13}
-                      className="h-12 text-sm border-2 border-slate-300 focus:border-emerald-500 rounded-xl"
+                      className={`h-12 text-sm border-2 focus:border-emerald-500 rounded-xl ${form.formState.errors.phone ? 'border-red-500' : 'border-slate-300'}`}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
@@ -198,18 +199,18 @@ export function Step2ElderInfo({ onNext, onPrev, initialData }: StepProps<ElderI
                     </FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12 text-sm border-2 border-slate-300 focus:border-emerald-500 rounded-xl">
+                        <SelectTrigger className={`h-12 text-sm border-2 focus:border-emerald-500 rounded-xl cursor-pointer ${form.formState.errors.relationship ? 'border-red-500' : 'border-slate-300'}`}>
                           <SelectValue placeholder="선택" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="son">아들</SelectItem>
-                        <SelectItem value="daughter">딸</SelectItem>
-                        <SelectItem value="son-in-law">사위</SelectItem>
-                        <SelectItem value="daughter-in-law">며느리</SelectItem>
-                        <SelectItem value="grandson">손자</SelectItem>
-                        <SelectItem value="granddaughter">손녀</SelectItem>
-                        <SelectItem value="other">기타</SelectItem>
+                        <SelectItem value="son" className="cursor-pointer">아들</SelectItem>
+                        <SelectItem value="daughter" className="cursor-pointer">딸</SelectItem>
+                        <SelectItem value="son-in-law" className="cursor-pointer">사위</SelectItem>
+                        <SelectItem value="daughter-in-law" className="cursor-pointer">며느리</SelectItem>
+                        <SelectItem value="grandson" className="cursor-pointer">손자</SelectItem>
+                        <SelectItem value="granddaughter" className="cursor-pointer">손녀</SelectItem>
+                        <SelectItem value="other" className="cursor-pointer">기타</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage className="text-xs" />
@@ -227,16 +228,16 @@ export function Step2ElderInfo({ onNext, onPrev, initialData }: StepProps<ElderI
                     </FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12 text-sm border-2 border-slate-300 focus:border-emerald-500 rounded-xl">
+                        <SelectTrigger className={`h-12 text-sm border-2 focus:border-emerald-500 rounded-xl cursor-pointer ${form.formState.errors.livingArrangement ? 'border-red-500' : 'border-slate-300'}`}>
                           <SelectValue placeholder="선택" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="alone">독거</SelectItem>
-                        <SelectItem value="with-spouse">배우자 동거</SelectItem>
-                        <SelectItem value="with-children">자녀 동거</SelectItem>
-                        <SelectItem value="nursing-home">요양시설</SelectItem>
-                        <SelectItem value="other">기타</SelectItem>
+                        <SelectItem value="alone" className="cursor-pointer">독거</SelectItem>
+                        <SelectItem value="with-spouse" className="cursor-pointer">배우자 동거</SelectItem>
+                        <SelectItem value="with-children" className="cursor-pointer">자녀 동거</SelectItem>
+                        <SelectItem value="nursing-home" className="cursor-pointer">요양시설</SelectItem>
+                        <SelectItem value="other" className="cursor-pointer">기타</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage className="text-xs" />
@@ -283,7 +284,7 @@ export function Step2ElderInfo({ onNext, onPrev, initialData }: StepProps<ElderI
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-bold text-slate-900">
-                    주요 질환 <span className="text-red-500">*</span>
+                    주요 질환 <span className="text-slate-500 font-medium text-xs">(선택)</span>
                     <TooltipProvider delayDuration={0}>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -299,7 +300,7 @@ export function Step2ElderInfo({ onNext, onPrev, initialData }: StepProps<ElderI
                   </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="예) 고혈압, 당뇨로 매일 아침 약 복용 중"
+                      placeholder="예) 고혈압, 당뇨 (있으시다면 적어주세요)"
                       className="resize-none min-h-[80px] text-sm border-2 border-slate-300 focus:border-emerald-500 rounded-xl"
                       maxLength={500}
                       {...field}

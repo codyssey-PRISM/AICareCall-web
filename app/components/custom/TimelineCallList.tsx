@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Emotion3D } from '@/app/components/custom/Emotion3D';
 
 interface CallRecord {
     id: number;
@@ -68,49 +69,12 @@ export function TimelineCallList({ calls, onCallClick }: TimelineCallListProps) 
         return colors[index % colors.length];
     };
 
-    // Get emotion color
-    const getEmotionStyle = (emotion: string) => {
+    const getEmotionTextColor = (emotion: string) => {
         switch (emotion) {
-            case '좋음':
-                return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-            case '보통':
-                return 'bg-blue-50 text-blue-700 border-blue-200';
-            case '나쁨':
-                return 'bg-amber-50 text-amber-700 border-amber-200';
-            default:
-                return 'bg-slate-50 text-slate-700 border-slate-200';
-        }
-    };
-
-    // Get emotion icon - Smaller size to match tags
-    const getEmotionIcon = (emotion: string) => {
-        switch (emotion) {
-            case '좋음':
-                return (
-                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                );
-            case '보통':
-                return (
-                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-sm">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12h6m-6 0a9 9 0 1118 0 9 9 0 01-18 0z" />
-                        </svg>
-                    </div>
-                );
-            case '나쁨':
-                return (
-                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-sm">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                );
-            default:
-                return null;
+            case '좋음': return 'text-emerald-700 bg-emerald-50 border-emerald-200';
+            case '보통': return 'text-blue-700 bg-blue-50 border-blue-200';
+            case '나쁨': return 'text-amber-700 bg-amber-50 border-amber-200';
+            default: return 'text-slate-700 bg-slate-50 border-slate-200';
         }
     };
 
@@ -152,7 +116,12 @@ export function TimelineCallList({ calls, onCallClick }: TimelineCallListProps) 
                                             )}
                                         </div>
                                         <p className={`text-base font-bold text-slate-700 leading-relaxed mb-3 ${expandedId === call.id ? '' : 'line-clamp-1'}`}>
-                                            {call.summary}
+                                            {expandedId === call.id 
+                                                ? call.summary 
+                                                : call.summary.length > 50 
+                                                    ? call.summary.substring(0, 50) + '...' 
+                                                    : call.summary
+                                            }
                                         </p>
 
                                         {/* Tags shown in collapsed state - Only if NOT expanded */}
@@ -164,10 +133,12 @@ export function TimelineCallList({ calls, onCallClick }: TimelineCallListProps) 
                                                     </span>
                                                 ))}
                                                 {call.emotion && (
-                                                    <span className={`text-xs font-bold px-2.5 py-1 rounded-md border flex items-center gap-1.5 ${getEmotionStyle(call.emotion)}`}>
-                                                        {getEmotionIcon(call.emotion)}
-                                                        <span>감정: {call.emotion}</span>
-                                                    </span>
+                                                    <div className="flex items-center gap-1.5 ml-1">
+                                                        <Emotion3D emotion={call.emotion} size="sm" />
+                                                        <span className={`text-xs font-bold ${call.emotion === '좋음' ? 'text-emerald-600' : call.emotion === '보통' ? 'text-blue-600' : 'text-amber-600'}`}>
+                                                            {call.emotion}
+                                                        </span>
+                                                    </div>
                                                 )}
                                             </div>
                                         )}
@@ -188,7 +159,7 @@ export function TimelineCallList({ calls, onCallClick }: TimelineCallListProps) 
                                 <div className={`grid transition-all duration-500 ease-in-out ${expandedId === call.id ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 mt-0'}`}>
                                     <div className="overflow-hidden">
                                         <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 text-sm text-slate-600 leading-relaxed mb-4">
-                                            어르신께서 오늘 기분이 참 좋으셨습니다. 특히 손주 이야기를 하실 때 목소리가 한 톤 높아지셨고, 웃음 소리도 자주 들렸습니다. 식사는 잘 챙겨 드셨는지 여쭤보았을 때, 된장찌개를 맛있게 드셨다고 하셨습니다.
+                                            {call.summary}
                                         </div>
 
                                         {/* Tags & Emotion in Expanded View */}
@@ -199,10 +170,10 @@ export function TimelineCallList({ calls, onCallClick }: TimelineCallListProps) 
                                                 </span>
                                             ))}
                                             {call.emotion && (
-                                                <span className={`ml-auto text-sm font-black px-4 py-2 rounded-lg flex items-center gap-2 ${getEmotionStyle(call.emotion)}`}>
-                                                    {getEmotionIcon(call.emotion)}
-                                                    <span>감정: {call.emotion}</span>
-                                                </span>
+                                                <div className={`ml-auto flex items-center gap-2 px-3 py-1.5 rounded-lg border ${getEmotionTextColor(call.emotion)}`}>
+                                                    <Emotion3D emotion={call.emotion} size="sm" />
+                                                    <span className="text-sm font-bold">감정: {call.emotion}</span>
+                                                </div>
                                             )}
                                         </div>
 
@@ -212,9 +183,9 @@ export function TimelineCallList({ calls, onCallClick }: TimelineCallListProps) 
                                                 e.stopPropagation();
                                                 onCallClick?.(call);
                                             }}
-                                            className="w-full py-3.5 rounded-lg bg-violet-600 text-white text-sm font-bold hover:bg-violet-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 group/btn"
+                                            className="w-full py-3.5 rounded-lg bg-violet-600 text-white text-sm font-bold hover:bg-violet-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 group/btn cursor-pointer"
                                         >
-                                            통화 내용 상세 정보
+                                            통화 상세 리포트
                                             <svg className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                             </svg>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { LNB } from '@/app/components/custom/LNB';
+import { LNB } from '@/app/components/LNB';
 import { SoriCharacter } from '@/app/components/custom/SoriCharacter';
 
 export default function Report() {
@@ -164,8 +164,8 @@ export default function Report() {
                 onClick={() => handleTabChange(tab)}
                 disabled={isLoadingTab}
                 className={`px-6 py-3 rounded-lg font-bold text-sm transition-all ${activeTab === tab
-                    ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   } ${isLoadingTab ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {tab === 'daily' ? '일일' : tab === 'weekly' ? '주간' : '월간'}
@@ -413,8 +413,8 @@ export default function Report() {
                       className={`flex gap-3 ${msg.speaker === 'sori' ? '' : 'flex-row-reverse'}`}
                     >
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${msg.speaker === 'sori'
-                          ? 'bg-gradient-to-br from-violet-600 to-purple-600'
-                          : 'bg-slate-200'
+                        ? 'bg-gradient-to-br from-violet-600 to-purple-600'
+                        : 'bg-slate-200'
                         }`}>
                         {msg.speaker === 'sori' ? (
                           <SoriCharacter size={24} animated={false} />
@@ -426,8 +426,8 @@ export default function Report() {
                       </div>
                       <div className={`flex-1 max-w-2xl ${msg.speaker === 'sori' ? '' : 'text-right'}`}>
                         <div className={`inline-block p-4 rounded-2xl ${msg.speaker === 'sori'
-                            ? 'bg-violet-100 border border-violet-200'
-                            : 'bg-slate-100 border border-slate-200'
+                          ? 'bg-violet-100 border border-violet-200'
+                          : 'bg-slate-100 border border-slate-200'
                           }`}>
                           <p className="text-sm font-medium text-slate-900 leading-relaxed">{msg.text}</p>
                         </div>
@@ -524,8 +524,8 @@ export default function Report() {
                       </div>
                       <div
                         className={`w-full rounded-t-lg transition-all hover:opacity-80 cursor-pointer ${day.status === 'excellent'
-                            ? 'bg-gradient-to-t from-green-600 to-emerald-500'
-                            : 'bg-gradient-to-t from-blue-600 to-cyan-500'
+                          ? 'bg-gradient-to-t from-green-600 to-emerald-500'
+                          : 'bg-gradient-to-t from-blue-600 to-cyan-500'
                           }`}
                         style={{ height: `${day.score}%` }}
                       ></div>
@@ -543,24 +543,24 @@ export default function Report() {
                     <div
                       key={idx}
                       className={`p-5 rounded-xl border-2 ${insight.type === 'positive'
-                          ? 'bg-green-50 border-green-200'
-                          : insight.type === 'attention'
-                            ? 'bg-red-50 border-red-200'
-                            : 'bg-blue-50 border-blue-200'
+                        ? 'bg-green-50 border-green-200'
+                        : insight.type === 'attention'
+                          ? 'bg-red-50 border-red-200'
+                          : 'bg-blue-50 border-blue-200'
                         }`}
                     >
                       <div className="flex items-start gap-4">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${insight.type === 'positive'
-                            ? 'bg-green-100'
-                            : insight.type === 'attention'
-                              ? 'bg-red-100'
-                              : 'bg-blue-100'
+                          ? 'bg-green-100'
+                          : insight.type === 'attention'
+                            ? 'bg-red-100'
+                            : 'bg-blue-100'
                           }`}>
                           <svg className={`w-5 h-5 ${insight.type === 'positive'
-                              ? 'text-green-600'
-                              : insight.type === 'attention'
-                                ? 'text-red-600'
-                                : 'text-blue-600'
+                            ? 'text-green-600'
+                            : insight.type === 'attention'
+                              ? 'text-red-600'
+                              : 'text-blue-600'
                             }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             {insight.type === 'positive' && (
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -578,10 +578,10 @@ export default function Report() {
                           <p className="text-sm text-slate-700">{insight.description}</p>
                         </div>
                         <span className={`text-xs font-black px-3 py-1 rounded-full ${insight.impact === 'high'
-                            ? 'bg-red-100 text-red-700'
-                            : insight.impact === 'medium'
-                              ? 'bg-yellow-100 text-yellow-700'
-                              : 'bg-slate-100 text-slate-700'
+                          ? 'bg-red-100 text-red-700'
+                          : insight.impact === 'medium'
+                            ? 'bg-yellow-100 text-yellow-700'
+                            : 'bg-slate-100 text-slate-700'
                           }`}>
                           {insight.impact === 'high' ? '높음' : insight.impact === 'medium' ? '중간' : '낮음'}
                         </span>
@@ -645,10 +645,10 @@ export default function Report() {
                       <p className="text-xl font-black text-slate-900 mb-2">#{kw.word}</p>
                       <p className="text-sm font-bold text-slate-700 mb-3">×{kw.count}회</p>
                       <span className={`inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-md ${kw.change.startsWith('+')
-                          ? 'bg-red-100 text-red-700'
-                          : kw.change === '0%'
-                            ? 'bg-slate-100 text-slate-700'
-                            : 'bg-emerald-100 text-emerald-700'
+                        ? 'bg-red-100 text-red-700'
+                        : kw.change === '0%'
+                          ? 'bg-slate-100 text-slate-700'
+                          : 'bg-emerald-100 text-emerald-700'
                         }`}>
                         {kw.change.startsWith('+') && <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>}
                         {kw.change.startsWith('-') && <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>}

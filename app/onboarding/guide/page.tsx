@@ -312,7 +312,7 @@ export default function OnboardingGuide() {
                 {currentSlide > 0 && (
                   <button
                     onClick={handlePrev}
-                    className="flex h-14 items-center justify-center rounded-xl bg-slate-100/80 px-8 text-base font-bold text-slate-700 backdrop-blur-sm transition-all duration-150 hover:scale-[1.02] hover:bg-slate-200 active:scale-95"
+                    className="flex h-14 items-center justify-center rounded-xl bg-slate-100/80 px-8 text-base font-bold text-slate-700 backdrop-blur-sm transition-all duration-150 hover:scale-[1.02] hover:bg-slate-200 active:scale-95 cursor-pointer"
                   >
                     잠깐만요
                   </button>
@@ -346,7 +346,7 @@ export default function OnboardingGuide() {
                 <div className="relative group">
                   <button
                     onClick={handleNext}
-                    className="relative flex h-12 min-w-[160px] items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 via-violet-600 to-purple-600 px-8 text-base font-bold text-white shadow-lg shadow-purple-500/30 transition-all duration-150 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/50 active:scale-95 overflow-hidden"
+                    className="relative flex h-12 min-w-[160px] items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 via-violet-600 to-purple-600 px-8 text-base font-bold text-white shadow-lg shadow-purple-500/30 transition-all duration-150 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/50 active:scale-95 overflow-hidden cursor-pointer"
                   >
                     {/* 호버 시 내부 그라데이션 오버레이 */}
                     <span

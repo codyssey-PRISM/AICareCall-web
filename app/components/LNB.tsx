@@ -27,7 +27,7 @@ export function LNB() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
         </svg>
       ),
-      path: '/calls'
+      path: '/call-history'
     },
     {
       id: 'chat',
@@ -69,7 +69,7 @@ export function LNB() {
       {/* Logo */}
       <div className="p-6 border-b border-slate-100">
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/dashboard')}
           className="flex items-center gap-3 group"
         >
           <SoriLogo size={36} />
@@ -85,11 +85,10 @@ export function LNB() {
             <button
               key={item.id}
               onClick={() => router.push(item.path)}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-md transition-all duration-200 ${
-                isActive
-                  ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-              }`}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-md transition-all duration-200 cursor-pointer ${isActive
+                ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                }`}
             >
               <div className="flex items-center gap-3">
                 {item.icon}

@@ -2,12 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LNB } from '@/app/components/custom/LNB';
+import { LNB } from '@/app/components/LNB';
 import { SoriCharacter } from '@/app/components/custom/SoriCharacter';
 import { NotificationCenter } from '@/app/components/custom/NotificationCenter';
 import { TimelineCallList } from '@/app/components/custom/TimelineCallList';
 import { CallDetailModal } from '@/app/components/custom/CallDetailModal';
-import { VersionSelector } from '@/app/sori-ai-dashboard-redesign/components/VersionSelector';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -143,7 +142,7 @@ export default function Dashboard() {
                   <span className="px-3 py-1 rounded-lg bg-white/20 backdrop-blur-md text-xs font-bold text-white/90 border border-white/30">방금 전</span>
                 </div>
                 <p className="text-base text-white/95 font-semibold leading-relaxed">
-                  오늘 오후 2시 통화에서 손주 방문 소식을 전하며 매우 들뜬 목소리셨습니다. 다음 통화 때는 <span className="inline-block px-2 py-0.5 text-xs font-black bg-amber-400 text-slate-900 rounded-md">약 복용 여부</span>를 잊지 않고 챙겨드릴게요.
+                  오늘 오후 2시 통화에서 손주 방문 소식을 전하며 매우 들뜬 목소리셨습니다. 다음 통화 때는 <span className="inline-block align-text-bottom px-2 py-0.5 text-xs font-black bg-amber-400 text-slate-900 rounded-md -translate-y-0.5">약 복용 여부</span>를 잊지 않고 챙겨드릴게요.
                 </p>
               </div>
             </div>
@@ -384,8 +383,6 @@ export default function Dashboard() {
         call={selectedCall || recentCalls[0]}
       />
 
-      {/* Version Selector */}
-      <VersionSelector />
     </div>
   );
 }

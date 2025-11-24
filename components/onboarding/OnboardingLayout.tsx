@@ -1,6 +1,8 @@
 import React from 'react';
 import { SoriCharacter } from '@/app/components/custom/SoriCharacter';
 
+import { SidebarInset } from '@/components/ui/sidebar';
+
 interface OnboardingLayoutProps {
   children: React.ReactNode;
   currentStep?: number;
@@ -54,7 +56,7 @@ export function OnboardingLayout({ children, currentStep = 1 }: OnboardingLayout
   const config = stepConfig[currentStep as 1 | 2 | 3 | 4 | 5] || stepConfig[1];
 
   return (
-    <div className={`min-h-screen flex transition-all duration-700 ease-in-out`}>
+    <SidebarInset className={`min-h-screen flex-row transition-all duration-700 ease-in-out`}>
       {/* 좌측 브랜딩 영역 - v2 스타일 (진한 그라데이션) */}
       <div className={`hidden lg:flex lg:w-[500px] border-r-2 border-white/20 bg-gradient-to-br ${config.leftPanelGradient} flex-col items-center justify-between p-12 transition-all duration-700 ease-in-out shadow-2xl`}>
         <div className="w-full">
@@ -136,6 +138,6 @@ export function OnboardingLayout({ children, currentStep = 1 }: OnboardingLayout
           </div>
         </div>
       </div>
-    </div>
+    </SidebarInset>
   );
 }

@@ -96,7 +96,11 @@ export default function Dashboard() {
   useEffect(() => {
     async function initDashboard() {
       try {
-        const currentUserId = userId || 2;
+        if (!userId) {
+          setIsLoading(false);
+          return; // API 호출 안 함, Empty state 표시
+        }
+        const currentUserId = userId;
         let currentElderId = elderId;
 
         if (!currentElderId) {

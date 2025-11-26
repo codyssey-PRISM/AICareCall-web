@@ -116,10 +116,10 @@ export function TimelineCallList({ calls, onCallClick }: TimelineCallListProps) 
                                             )}
                                         </div>
                                         <p className={`text-base font-bold text-slate-700 leading-relaxed mb-3 ${expandedId === call.id ? '' : 'line-clamp-1'}`}>
-                                            {expandedId === call.id 
-                                                ? call.summary 
-                                                : call.summary.length > 50 
-                                                    ? call.summary.substring(0, 50) + '...' 
+                                            {expandedId === call.id
+                                                ? call.summary
+                                                : call.summary.length > 50
+                                                    ? call.summary.substring(0, 50) + '...'
                                                     : call.summary
                                             }
                                         </p>

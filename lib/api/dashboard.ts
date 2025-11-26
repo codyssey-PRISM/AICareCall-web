@@ -89,4 +89,63 @@ export const dashboardApi = {
 
         return response.json();
     },
+
+    async getCallList(elderId: number, page: number = 1): Promise<CallListResponse> {
+        const response = await fetch(`${API_BASE_URL}/dashboard/${elderId}/call-list?page=${page}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`통화 목록 조회 실패: ${response.status}`);
+        }
+
+        return response.json();
+    },
+
+    async getCallDetail(callId: number): Promise<CallDetailResponse> {
+        const response = await fetch(`${API_BASE_URL}/dashboard/call-detail/${callId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`통화 상세 조회 실패: ${response.status}`);
+        }
+
+        return response.json();
+    },
 };
+
+// 통화 목록 응답 타입
+export interface CallListResponse {
+    items: RecentCallItem[];
+    total: number;
+    page: number;
+    page_size: number;
+    total_pages: number;
+}
+
+// 통화 상세 응답 타입
+export interface CallDetailResponse {
+    id: number;
+    elder_name: string;
+    date: string;  // "2023년 10월 27일"
+    time: string;  // "10:30 AM"
+    duration: string;  // "5분 32초"
+    status: string;
+    emotion: string | null;
+    summary: string;
+    tags: string[];
+    messages: CallMessageItem[];
+}
+
+export interface CallMessageItem {
+    role: string;  // "user" | "assistant"
+    message: string;
+    timestamp: string;
+}

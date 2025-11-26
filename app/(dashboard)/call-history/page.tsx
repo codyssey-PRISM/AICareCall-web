@@ -6,6 +6,7 @@ import { LNB } from '@/app/components/LNB';
 import { SidebarInset } from '@/components/ui/sidebar';
 import { dashboardApi, CallListResponse } from '@/lib/api/dashboard';
 import { elderApi } from '@/lib/api/elder';
+import { useUserStore } from '@/store/userStore';
 import { convertCallStatus } from '@/lib/dashboard-helpers';
 
 export const dynamic = 'force-dynamic';
@@ -20,18 +21,8 @@ function CallHistoryContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // User & Elder ID (LocalStorage)
-  const [userId, setUserId] = useState<number | null>(null);
-  const [elderId, setElderId] = useState<number | null>(null);
-
-  useEffect(() => {
-    // LocalStorage에서 userId, elderId 가져오기
-    const storedUserId = localStorage.getItem('userId');
-    const storedElderId = localStorage.getItem('elderId');
-
-    if (storedUserId) setUserId(parseInt(storedUserId, 10));
-    if (storedElderId) setElderId(parseInt(storedElderId, 10));
-  }, []);
+  // User & Elder ID (Zustand Store)
+  const { userId, elderId, setElderId } = useUserStore();
 
   useEffect(() => {
     async function fetchCallList() {

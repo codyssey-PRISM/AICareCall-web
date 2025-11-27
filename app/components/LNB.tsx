@@ -19,8 +19,8 @@ export function LNB() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // URL에서 현재 elderId 추출
-  const currentElderId = pathname?.match(/\/dashboard\/(\d+)/)?.[1];
+  // URL에서 현재 elderId 추출 (dashboard 또는 call-list에서)
+  const currentElderId = pathname?.match(/\/(dashboard|call-list)\/(\d+)/)?.[2];
   const dashboardPath = currentElderId
     ? `/dashboard/${currentElderId}`
     : "/dashboard";
@@ -64,7 +64,7 @@ export function LNB() {
           />
         </svg>
       ),
-      path: "/detail",
+      path: currentElderId ? `/call-list/${currentElderId}` : "/call-list",
     },
     {
       id: "chat",

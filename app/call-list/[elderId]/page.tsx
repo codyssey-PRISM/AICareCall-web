@@ -1,19 +1,19 @@
 'use client';
 
 import { Suspense, useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { LNB } from '@/app/components/LNB';
 import { SidebarInset } from '@/components/ui/sidebar';
 import { dashboardApi, CallListResponse } from '@/lib/api/dashboard';
-import { elderApi } from '@/lib/api/elder';
-import { useUserStore } from '@/store/userStore';
 import { convertCallStatus } from '@/lib/dashboard-helpers';
 
 export const dynamic = 'force-dynamic';
 
 function CallHistoryContent() {
   const router = useRouter();
+  const params = useParams();
   const searchParams = useSearchParams();
+  const elderId = params.elderId ? Number(params.elderId) : null;
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
   // State
@@ -21,35 +21,17 @@ function CallHistoryContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // User & Elder ID (Zustand Store)
-  const { userId, elderId, setElderId } = useUserStore();
-
   useEffect(() => {
     async function fetchCallList() {
+      if (!elderId) {
+        setError('잘못된 접근입니다.');
+        setIsLoading(false);
+        return;
+      }
+
       try {
         setIsLoading(true);
-
-        // userId 기본값
-        if (!userId) {
-          setIsLoading(false);
-          return;
-        }
-        const currentUserId = userId;
-        let currentElderId = elderId;
-
-        // elderId가 없으면 API로 가져오기 (대시보드와 동일)
-        if (!currentElderId) {
-          const elders = await elderApi.getElders(currentUserId);
-          if (elders.length === 0) {
-            setError('등록된 어르신이 없습니다.');
-            setIsLoading(false);
-            return;
-          }
-          currentElderId = elders[0].id;
-          setElderId(currentElderId);
-        }
-
-        const data = await dashboardApi.getCallList(currentElderId, currentPage);
+        const data = await dashboardApi.getCallList(elderId, currentPage);
         setCallListData(data);
       } catch (err) {
         console.error('통화 목록 조회 실패:', err);
@@ -60,10 +42,10 @@ function CallHistoryContent() {
     }
 
     fetchCallList();
-  }, [userId, elderId, currentPage]);
+  }, [elderId, currentPage]);
 
-  const handlePageChange = (page: number) => router.push(`/detail?page=${page}`);
-  const handleCallClick = (call: any) => router.push(`/detail/${call.id}`);
+  const handlePageChange = (page: number) => router.push(`/call-list/${elderId}?page=${page}`);
+  const handleCallClick = (call: any) => router.push(`/call-list/${elderId}/${call.id}`);
 
   return (
     <>
@@ -90,11 +72,18 @@ function CallHistoryContent() {
             <div className="p-8 bg-slate-50/30">
               {isLoading ? (
                 <div className="text-center py-12">
+                  <div className="w-12 h-12 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin mx-auto mb-4"></div>
                   <div className="text-slate-600 text-lg font-semibold">로딩 중...</div>
                 </div>
               ) : error ? (
                 <div className="text-center py-12">
-                  <div className="text-red-600 text-lg font-semibold">{error}</div>
+                  <div className="text-red-600 text-lg font-semibold mb-4">{error}</div>
+                  <button
+                    onClick={() => router.push(`/dashboard/${elderId}`)}
+                    className="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold rounded-lg transition-colors"
+                  >
+                    대시보드로 돌아가기
+                  </button>
                 </div>
               ) : callListData && callListData.items.length > 0 ? (
                 <>
@@ -126,7 +115,7 @@ function CallHistoryContent() {
                                 </span>
                               </button>
                             </div>
-                            {/* 감정 아이콘 (원본) */}
+                            {/* 감정 아이콘 */}
                             {call.emotion ? (
                               <div className={`w-12 h-12 rounded-2xl ${call.emotion === '좋음' ? 'bg-emerald-100 border-emerald-200' : call.emotion === '보통' ? 'bg-blue-100 border-blue-200' : 'bg-red-100 border-red-200'} border flex items-center justify-center shadow-sm`}>
                                 <div className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-yellow-500 flex items-center justify-center relative">
@@ -177,3 +166,4 @@ export default function CallHistoryPage() {
     </Suspense>
   );
 }
+

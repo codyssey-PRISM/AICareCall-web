@@ -19,6 +19,25 @@ export interface ElderCreateResponse {
     invite_code: string;
 }
 
+export interface ElderCreate {
+    name: string;
+    gender: string;
+    age: number;
+    phone: string;
+    relation: string;
+    residence_type: string;
+    health_condition: string;
+    begin_date: string;
+    end_date: string | null;
+    ask_meal: boolean;
+    ask_medication: boolean;
+    ask_emotion: boolean;
+    ask_special_event: boolean;
+    additional_info: string;
+    call_weekdays: string[];
+    call_times: string[];
+}
+
 /**
  * 어르신 관련 API
  */

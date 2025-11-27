@@ -52,6 +52,7 @@ export interface NextScheduledCall {
     datetime: string;
     date_display: string;
     time_display: string;
+    day_of_week: string;
     is_today: boolean;
 }
 

@@ -10,19 +10,20 @@ import { dashboardApi, CallDetailResponse } from '@/lib/api/dashboard';
 export default function CallDetailPage() {
     const router = useRouter();
     const params = useParams();
-    const id = params?.id as string;
+    const elderId = params?.elderId as string;
+    const callId = params?.callId as string;
 
     const [callData, setCallData] = useState<CallDetailResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!callId) return;
 
         async function fetchCallDetail() {
             try {
                 setIsLoading(true);
-                const data = await dashboardApi.getCallDetail(parseInt(id, 10));
+                const data = await dashboardApi.getCallDetail(parseInt(callId, 10));
                 setCallData(data);
             } catch (err) {
                 console.error('통화 상세 조회 실패:', err);
@@ -33,7 +34,7 @@ export default function CallDetailPage() {
         }
 
         fetchCallDetail();
-    }, [id]);
+    }, [callId]);
 
     // 로딩 상태
     if (isLoading) {
@@ -54,10 +55,10 @@ export default function CallDetailPage() {
                 <div className="text-center">
                     <p className="text-red-600 font-bold mb-4">{error || '데이터를 불러올 수 없습니다.'}</p>
                     <button
-                        onClick={() => router.back()}
+                        onClick={() => router.push(`/call-list/${elderId}`)}
                         className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-lg transition-colors"
                     >
-                        돌아가기
+                        목록으로 돌아가기
                     </button>
                 </div>
             </div>
@@ -69,7 +70,7 @@ export default function CallDetailPage() {
             {/* Header */}
             <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center gap-3 flex-shrink-0">
                 <button
-                    onClick={() => router.back()}
+                    onClick={() => router.push(`/call-list/${elderId}`)}
                     className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                 >
                     <ArrowLeft className="w-5 h-5 text-slate-600" />
@@ -209,7 +210,7 @@ export default function CallDetailPage() {
 
                     {/* Right Panel */}
                     <div className="flex flex-col gap-4 overflow-hidden">
-                        {/* AI 요약 - 통화 기본 정보와 높이 일치 */}
+                        {/* AI 요약 */}
                         <div className="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl border-2 border-violet-200 shadow-md flex-shrink-0" style={{ minHeight: '185px', padding: '20px' }}>
                             <div className="flex items-center gap-2 mb-3">
                                 <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg">
@@ -276,3 +277,4 @@ export default function CallDetailPage() {
         </div>
     );
 }
+
